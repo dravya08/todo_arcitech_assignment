@@ -18,22 +18,28 @@ class TodoRepository {
   }
 
   Future<List<Todo>> fetchTodos() async {
-    final response =
-        await http.get(Uri.parse('https://dravya.wiremockapi.cloud/todo_list'));
+    try {
+      final response = await http
+          .get(Uri.parse('https://dravya.wiremockapi.cloud/todo_list'));
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      final List<dynamic> todoList = jsonResponse['data'];
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        final List<dynamic> todoList = jsonResponse['data'];
 
-      // Convert the JSON response to a list of Todo objects
-      final todos = todoList.map((json) => Todo.fromJson(json)).toList();
+        // Convert the JSON response to a list of Todo objects
+        final todos = todoList.map((json) => Todo.fromJson(json)).toList();
 
-      // Save the todos to local storage
-      _todoBox.putMany(todos);
+        // Save the todos to local storage
+        _todoBox.putMany(todos);
 
-      return todos;
-    } else {
-      throw Exception('Failed to load todos');
+        return todos;
+      } else {
+        throw Exception('Failed to load todos');
+      }
+    } catch (e) {
+      print('Error fetching todos: $e');
+      // Handle error, return empty list or re-throw the exception
+      return []; // or re-throw the exception based on your app's logic
     }
   }
 
