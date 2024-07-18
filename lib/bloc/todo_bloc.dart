@@ -61,10 +61,15 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   void _onCompleteTodo(CompleteTodo event, Emitter<TodoState> emit) async {
     if (state is TodoLoaded) {
       final List<Todo> updatedTodos = (state as TodoLoaded).todos.map((todo) {
-        return todo.id == event.id ? todo.copyWith(completed: true) : todo;
+        if (todo.id == event.id) {
+          return todo.copyWith(completed: !todo.completed);
+        }
+        return todo;
       }).toList();
       emit(TodoLoaded(todos: updatedTodos));
-      await todoRepository.completeTodo(event.id);
+      await todoRepository.updateTodo(
+        updatedTodos.firstWhere((todo) => todo.id == event.id),
+      );
     }
   }
 }

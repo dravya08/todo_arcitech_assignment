@@ -45,6 +45,8 @@ class TodoScreen extends StatelessWidget {
                       title: Text(
                         todo.title,
                         style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
                           decoration: todo.completed
                               ? TextDecoration.lineThrough
                               : TextDecoration.none,
@@ -53,6 +55,8 @@ class TodoScreen extends StatelessWidget {
                       subtitle: Text(
                         todo.description,
                         style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 12,
                           decoration: todo.completed
                               ? TextDecoration.lineThrough
                               : TextDecoration.none,

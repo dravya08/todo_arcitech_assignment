@@ -4,20 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/todo_bloc.dart';
 import '../models/todo.dart';
 
-class abc extends StatefulWidget {
-  const abc({super.key});
-
-  @override
-  State<abc> createState() => _abcState();
-}
-
-class _abcState extends State<abc> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
 class TodoFormScreen extends StatefulWidget {
   final Todo? todo;
 
@@ -50,10 +36,26 @@ class _TodoFormScreenState extends State<TodoFormScreen> {
         child: Form(
           key: _formKey,
           child: Column(
-            children: [
+            children: <Widget>[
               TextFormField(
+                style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                ),
                 initialValue: _title,
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(), // Default border
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
                 onSaved: (value) {
                   _title = value!;
                 },
@@ -64,9 +66,27 @@ class _TodoFormScreenState extends State<TodoFormScreen> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
               TextFormField(
+                style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                ),
+                maxLines: 2,
                 initialValue: _description,
-                decoration: const InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(
+                  labelText: 'Description',
+                  border: OutlineInputBorder(), // Default border
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
                 onSaved: (value) {
                   _description = value!;
                 },
