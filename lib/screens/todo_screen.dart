@@ -5,59 +5,100 @@ import 'package:todo_arcitech_assignment/screens/todo_form_screen.dart';
 import '../bloc/todo_bloc.dart';
 
 class TodoScreen extends StatelessWidget {
+  const TodoScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('To-Do List'),
+        title: const Text('To-Do List'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              context.read<TodoBloc>().add(FetchTodos());
+            },
+          ),
+        ],
       ),
       body: BlocBuilder<TodoBloc, TodoState>(
         builder: (context, state) {
           if (state is TodoLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (state is TodoLoaded) {
             return ListView.builder(
               itemCount: state.todos.length,
               itemBuilder: (context, index) {
                 final todo = state.todos[index];
-                return ListTile(
-                  title: Text(todo.title),
-                  subtitle: Text(todo.description),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => TodoFormScreen(todo: todo),
-                            ),
-                          );
-                        },
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
+                      color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    ),
+                    child: ListTile(
+                      dense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 4.0),
+                      title: Text(
+                        todo.title,
+                        style: TextStyle(
+                          decoration: todo.completed
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
                       ),
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          context.read<TodoBloc>().add(DeleteTodo(todo.id));
-                        },
+                      subtitle: Text(
+                        todo.description,
+                        style: TextStyle(
+                          decoration: todo.completed
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
                       ),
-                      Checkbox(
+                      leading: Checkbox(
+                        tristate: false,
                         value: todo.completed,
+                        shape: const CircleBorder(),
                         onChanged: (value) {
                           if (value != null) {
                             context.read<TodoBloc>().add(CompleteTodo(todo.id));
                           }
                         },
                       ),
-                    ],
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => TodoFormScreen(todo: todo),
+                                ),
+                              );
+                            },
+                          ),
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              context.read<TodoBloc>().add(DeleteTodo(todo.id));
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               },
             );
           } else if (state is TodoError) {
-            return Center(child: Text('Failed to fetch todos'));
+            return const Center(child: Text('Failed to fetch todos'));
           } else {
             return Container();
           }
@@ -68,11 +109,11 @@ class TodoScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => TodoFormScreen(),
+              builder: (_) => const TodoFormScreen(),
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

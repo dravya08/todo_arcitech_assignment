@@ -19,6 +19,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   }
 
   void _onFetchTodos(FetchTodos event, Emitter<TodoState> emit) async {
+    emit(TodoLoading());
     try {
       final todos = await todoRepository.fetchTodos();
       emit(TodoLoaded(todos: todos));

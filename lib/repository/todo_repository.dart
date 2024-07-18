@@ -18,7 +18,8 @@ class TodoRepository {
   }
 
   Future<List<Todo>> fetchTodos() async {
-    final response = await http.get(Uri.parse('https://api.example.com/todos'));
+    final response =
+        await http.get(Uri.parse('https://dravya.wiremockapi.cloud/todo_list'));
 
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
